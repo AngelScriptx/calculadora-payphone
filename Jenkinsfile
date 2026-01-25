@@ -5,42 +5,43 @@ pipeline {
         NODE_ENV = 'production'
         PAYPHONE_TOKEN = credentials('PAYPHONE_TOKEN')
     }
+
     tools {
         nodejs "Node25"
-        dockerTool "Dockertool" 
+        dockerTool "Dockertool"
     }
 
     stages {
-
         stage('Clone Repository') {
             steps {
                 git branch: 'master',
                     url: 'https://github.com/AngelScriptx/calculadora-payphone.git'
             }
         }
-stage('Check Docker') {
-    steps {
-        sh 'docker --version'
-        sh 'docker-compose --version'
-    }
-}
-        stage('Install Dependencies') {
+
+        stage('Check Docker') {
             steps {
-                // Forzar instalación de devDependencies aunque NODE_ENV=production
-        sh 'npm install --include=dev'
-                // Muestra dependencias y devDependencies instaladas
-        sh 'npm list --depth=0'
-        // Muestra solo las devDependencies instaladas
-        echo 'DevDependencies instaladas:'
-        sh 'npm list --depth=0 --dev'
+                sh 'docker --version'
+                sh 'docker compose version'
             }
         }
 
-       stage('Run Tests') {
-  steps {
-    sh 'npm test'
-  }
-}
+        stage('Install Dependencies') {
+            steps {
+                // Forzar instalación de devDependencies aunque NODE_ENV=production
+                sh 'npm install --include=dev'
+                // Muestra dependencias y devDependencies instaladas
+                sh 'npm list --depth=0'
+                echo 'DevDependencies instaladas:'
+                sh 'npm list --depth=0 --dev'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
 
         stage('Build Next.js') {
             steps {
@@ -49,25 +50,25 @@ stage('Check Docker') {
         }
 
         stage('Deploy with Docker Compose') {
-    steps {
-        // Usa el plugin dockerCompose (si está instalado)
-        dockerCompose(
-            useComposeFiles: ['docker-compose.yml'], // archivo docker-compose
-            action: 'down',                            // primero baja contenedores si existen
-            options: ''                                // opcional
-        )
-        dockerCompose(
-            useComposeFiles: ['docker-compose.yml'],
-            action: 'build'                            // construye la imagen
-        )
-        dockerCompose(
-            useComposeFiles: ['docker-compose.yml'],
-            action: 'up',
-            options: '-d'                               // ejecuta en modo detached
-        )
-    }
-}
-
+            steps {
+                // Usa el plugin dockerCompose (si está instalado)
+                dockerCompose(
+                    useComposeFiles: ['docker-compose.yml'], // archivo docker-compose
+                    action: 'down',                            // baja contenedores si existen
+                    options: ''                                // opcional
+                )
+                dockerCompose(
+                    useComposeFiles: ['docker-compose.yml'],
+                    action: 'build'                            // construye la imagen
+                )
+                dockerCompose(
+                    useComposeFiles: ['docker-compose.yml'],
+                    action: 'up',
+                    options: '-d'                              // ejecuta en modo detached
+                )
+            }
+        }
+    } // Cierre de stages
 
     post {
         success {
@@ -77,4 +78,4 @@ stage('Check Docker') {
             echo 'Error en el pipeline'
         }
     }
-}
+} // Cierre de pipeline
