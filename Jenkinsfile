@@ -26,12 +26,11 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                // Asegúrate de que jest use el preset correcto para ESM
-                sh 'npx jest'
-            }
-        }
+       stage('Run Tests') {
+  steps {
+    sh 'npm test'
+  }
+}
 
         stage('Build Next.js') {
             steps {
