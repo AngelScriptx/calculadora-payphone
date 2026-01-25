@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "test/payphone.test.ts", "jest.config.mjs"  ],
+, "test/payphone.test.ts", "jest.config.ts"  ],
   "exclude": ["node_modules"]
 }
