@@ -136,7 +136,7 @@ export default function Home() {
               {num}
             </button>
           ))}
-          <button onClick={limpiar} className="bg-[#3fff14] rounded-3xl border-black border-b-[6px] cusrsor-pointer border-r-[6px] cusrsor-pointer">Clear</button>
+          <button onClick={limpiar} className="bg-[#3fff14] rounded-3xl border-black border-b-[6px] cusrsor-pointer border-r-[6px] cusrsor-pointer">C</button>
         </section>
 
         {/* ➕ OPERADORES */}
