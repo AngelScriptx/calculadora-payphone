@@ -1,15 +1,15 @@
 // jest.config.mjs
 export default {
-  preset: "ts-jest",
+  preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
-  testMatch: ["**/test/**/*.test.ts"],
+  testMatch: ["**/test/**/*.test.ts"], 
   globals: {
     "ts-jest": {
-      useESM: true, // habilita compatibilidad ESM
-      tsconfig: "tsconfig.json"
+      useESM: true
     }
   },
   transform: {
     "^.+\\.ts$": ["ts-jest", { useESM: true }]
-  }
+  },
+  extensionsToTreatAsEsm: [".ts"]
 };

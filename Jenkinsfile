@@ -24,11 +24,7 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Check Jest') {
-            steps {
-        sh 'npx jest --version'
-    }
-}
+
         stage('Run Tests') {
             steps {
                 sh 'npm test'
