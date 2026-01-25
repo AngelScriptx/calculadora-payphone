@@ -51,21 +51,9 @@ pipeline {
 
         stage('Deploy with Docker Compose') {
             steps {
-                // IMPORTANTE: Al usar el socket de tu máquina física, 
-                // el 'down' borrará el contenedor viejo en tu Windows 
-                // y el 'up' levantará el nuevo.
-                
-                script {
-                    dockerCompose(
-                        useComposeFiles: ['docker-compose.yml'],
-                        action: 'down'
-                    )
-                    dockerCompose(
-                        useComposeFiles: ['docker-compose.yml'],
-                        action: 'up',
-                        options: '--build -d' // Combinamos build y up para mayor rapidez
-                    )
-                }
+      
+                sh 'docker compose down'
+                sh 'docker compose up --build -d'
             }
         }
     }
