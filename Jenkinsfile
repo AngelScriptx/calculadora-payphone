@@ -21,13 +21,15 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                // Instala TODAS las dependencias incluyendo devDependencies
+                sh 'npm ci'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test'
+                // Asegúrate de que jest use el preset correcto para ESM
+                sh 'npx jest --config jest.config.mjs'
             }
         }
 
@@ -50,10 +52,10 @@ pipeline {
 
     post {
         success {
-            echo ' Despliegue exitoso con Docker'
+            echo 'Despliegue exitoso con Docker'
         }
         failure {
-            echo ' Error en el pipeline'
+            echo 'Error en el pipeline'
         }
     }
 }
