@@ -52,8 +52,6 @@ pipeline {
      stage('Deploy with Docker Compose') {
     steps {
         script {
-
-            // 2. Ahora que ya existe, lo usamos con guion (que es como lo acabamos de instalar)
             sh 'docker-compose down'
             sh 'docker-compose up --build -d'
         }
