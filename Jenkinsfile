@@ -18,7 +18,12 @@ pipeline {
                     url: 'https://github.com/AngelScriptx/calculadora-payphone.git'
             }
         }
-
+stage('Check Docker') {
+    steps {
+        sh 'docker --version'
+        sh 'docker-compose --version'
+    }
+}
         stage('Install Dependencies') {
             steps {
                 // Forzar instalación de devDependencies aunque NODE_ENV=production
