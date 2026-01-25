@@ -21,8 +21,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Instala TODAS las dependencias incluyendo devDependencies
-                sh 'npm ci'
+                // Forzar instalación de devDependencies aunque NODE_ENV=production
+        sh 'npm install --include=dev'
                 // Muestra dependencias y devDependencies instaladas
         sh 'npm list --depth=0'
         // Muestra solo las devDependencies instaladas
