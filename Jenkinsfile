@@ -29,7 +29,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Asegúrate de que jest use el preset correcto para ESM
-                sh 'npx jest --config jest.config.mjs'
+                sh 'npx jest'
             }
         }
 
