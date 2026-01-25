@@ -25,6 +25,9 @@ pipeline {
                 sh 'npm ci'
                 // Muestra dependencias y devDependencies instaladas
         sh 'npm list --depth=0'
+        // Muestra solo las devDependencies instaladas
+        echo 'DevDependencies instaladas:'
+        sh 'npm list --depth=0 --dev'
             }
         }
 
