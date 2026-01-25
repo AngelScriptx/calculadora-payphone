@@ -50,13 +50,25 @@ pipeline {
         }
 
      stage('Deploy with Docker Compose') {
-            steps {
-                // Cambiamos 'docker compose' por 'docker-compose'
-                // Si el plugin de Jenkins está bien instalado, este binario debería existir
-                sh 'docker-compose down'
-                sh 'docker-compose up --build -d'
-            }
+    steps {
+        script {
+            // 1. Descargamos el binario de Docker Compose (v2.29.2 es una versión estable y moderna)
+            // Lo bajamos directamente a /usr/local/bin para que sea global
+            sh '''
+                if ! command -v docker-compose &> /dev/null; then
+                    echo "Instalando Docker Compose..."
+                    curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+                    chmod +x /usr/local/bin/docker-compose
+                    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose || true
+                fi
+            '''
+
+            // 2. Ahora que ya existe, lo usamos con guion (que es como lo acabamos de instalar)
+            sh 'docker-compose down'
+            sh 'docker-compose up --build -d'
         }
+    }
+}
     }
 
     post {
