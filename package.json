@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "npx jest"
+    "test": "npx jest --config jest.config.js"
   },
   "dependencies": {
     "axios": "^1.13.2",
