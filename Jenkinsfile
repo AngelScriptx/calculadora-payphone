@@ -23,6 +23,8 @@ pipeline {
             steps {
                 // Instala TODAS las dependencias incluyendo devDependencies
                 sh 'npm ci'
+                // Muestra dependencias y devDependencies instaladas
+        sh 'npm list --depth=0'
             }
         }
 
