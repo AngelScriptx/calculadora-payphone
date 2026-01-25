@@ -49,11 +49,12 @@ pipeline {
             }
         }
 
-        stage('Deploy with Docker Compose') {
+     stage('Deploy with Docker Compose') {
             steps {
-      
-                sh 'docker compose down'
-                sh 'docker compose up --build -d'
+                // Cambiamos 'docker compose' por 'docker-compose'
+                // Si el plugin de Jenkins está bien instalado, este binario debería existir
+                sh 'docker-compose down'
+                sh 'docker-compose up --build -d'
             }
         }
     }
