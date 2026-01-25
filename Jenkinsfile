@@ -48,16 +48,26 @@ stage('Check Docker') {
             }
         }
 
-        stage('Deploy with Docker') {
-            steps {
-                sh '''
-                docker-compose down
-                docker-compose build
-                docker-compose up -d
-                '''
-            }
-        }
+        stage('Deploy with Docker Compose') {
+    steps {
+        // Usa el plugin dockerCompose (si está instalado)
+        dockerCompose(
+            useComposeFiles: ['docker-compose.yml'], // archivo docker-compose
+            action: 'down',                            // primero baja contenedores si existen
+            options: ''                                // opcional
+        )
+        dockerCompose(
+            useComposeFiles: ['docker-compose.yml'],
+            action: 'build'                            // construye la imagen
+        )
+        dockerCompose(
+            useComposeFiles: ['docker-compose.yml'],
+            action: 'up',
+            options: '-d'                               // ejecuta en modo detached
+        )
     }
+}
+
 
     post {
         success {
