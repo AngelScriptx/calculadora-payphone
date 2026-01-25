@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  nextjs-payphone:
+    build: .
+    container_name: nextjs-payphone
+    ports:
+      - "3000:3000"
+    environment:
+      PAYPHONE_TOKEN: ${PAYPHONE_TOKEN}
+      NODE_ENV: ${NODE_ENV}
+    restart: always
