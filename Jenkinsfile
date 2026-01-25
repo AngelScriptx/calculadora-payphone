@@ -3,12 +3,13 @@ pipeline {
 
     environment {
         NODE_ENV = 'production'
+        // Las credenciales se inyectan correctamente como variables de entorno
         PAYPHONE_TOKEN = credentials('PAYPHONE_TOKEN')
     }
 
     tools {
         nodejs "Node25"
-        dockerTool "Dockertool"
+        dockerTool "Dockertool" // Esto activará automáticamente la v27.0.3 en el PATH
     }
 
     stages {
@@ -19,20 +20,19 @@ pipeline {
             }
         }
 
-        stage('Check Docker') {
+        stage('Check Docker & Environment') {
             steps {
+                // Verificamos que estamos usando la versión nueva
                 sh 'docker --version'
+                sh 'node --version'
+                sh 'npm --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Forzar instalación de devDependencies aunque NODE_ENV=production
+                // Instalamos todo, incluyendo devDependencies para poder buildear y testear
                 sh 'npm install --include=dev'
-                // Muestra dependencias y devDependencies instaladas
-                sh 'npm list --depth=0'
-                echo 'DevDependencies instaladas:'
-                sh 'npm list --depth=0 --dev'
             }
         }
 
@@ -44,37 +44,38 @@ pipeline {
 
         stage('Build Next.js') {
             steps {
+                // Generamos el build de producción de Next.js
                 sh 'npm run build'
             }
         }
 
         stage('Deploy with Docker Compose') {
             steps {
-                // Usa el plugin dockerCompose (si está instalado)
-                dockerCompose(
-                    useComposeFiles: ['docker-compose.yml'], // archivo docker-compose
-                    action: 'down',                            // baja contenedores si existen
-                    options: ''                                // opcional
-                )
-                dockerCompose(
-                    useComposeFiles: ['docker-compose.yml'],
-                    action: 'build'                            // construye la imagen
-                )
-                dockerCompose(
-                    useComposeFiles: ['docker-compose.yml'],
-                    action: 'up',
-                    options: '-d'                              // ejecuta en modo detached
-                )
+                // IMPORTANTE: Al usar el socket de tu máquina física, 
+                // el 'down' borrará el contenedor viejo en tu Windows 
+                // y el 'up' levantará el nuevo.
+                
+                script {
+                    dockerCompose(
+                        useComposeFiles: ['docker-compose.yml'],
+                        action: 'down'
+                    )
+                    dockerCompose(
+                        useComposeFiles: ['docker-compose.yml'],
+                        action: 'up',
+                        options: '--build -d' // Combinamos build y up para mayor rapidez
+                    )
+                }
             }
         }
-    } // Cierre de stages
+    }
 
     post {
         success {
-            echo 'Despliegue exitoso con Docker'
+            echo '¡Despliegue exitoso! La aplicación está corriendo en tu motor de Docker.'
         }
         failure {
-            echo 'Error en el pipeline'
+            echo 'El pipeline falló. Revisa los logs de arriba.'
         }
     }
-} // Cierre de pipeline
+}
