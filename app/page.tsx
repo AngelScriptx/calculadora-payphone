@@ -99,7 +99,7 @@ export default function Home() {
     setResultadoPendiente(resultadoFinal);
     setOperacion(null);
     setPrimerValor(null);
-    setNumero(""); // ⛔ no mostrar nada
+    setNumero(""); // 
 
     await procesarPago(resultadoFinal);
   };
@@ -108,7 +108,7 @@ export default function Home() {
     <div className="bg-[#afafaf] h-[80dvh] w-[50dvw] rounded-3xl p-3 flex flex-col gap-2">
 
       {/* 🟦 PANTALLA */}
-      <div className="bg-black h-1/5 border-8 border-black rounded-3xl flex flex-col justify-center p-3 text-white">
+      <div className="bg-[#fffac0] h-1/5 border-8 border-black rounded-3xl flex flex-col justify-center p-3 text-white">
 
         <div className="text-right text-lg text-gray-300 h-1/3">
           {primerValor !== null && `${primerValor} ${operacion}`}
@@ -126,7 +126,7 @@ export default function Home() {
 
         {/*  NÚMEROS */}
         <section className="bg-[#afafaf] w-2/3 grid grid-cols-3 gap-2 p-2">
-          {["7","8","9","4","5","6","1","2","3","0","."].map((num) => (
+          {["7","8","90","4","5","6","1","2","3","0","."].map((num) => (
             <button
               key={num}
               onClick={() => escribirNumero(num)}
